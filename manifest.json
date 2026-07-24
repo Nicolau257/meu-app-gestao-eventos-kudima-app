@@ -1,0 +1,9 @@
+{
+  "name": "Gestão de Eventos Kudima",
+  "short_name": "Kudima",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#228B22",
+  "icons": []
+}
