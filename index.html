@@ -2,20 +2,27 @@
 <html lang="pt">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestão de Eventos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Gestão de Eventos Kudima</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+<!-- Suporte PWA iOS / Safari -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Kudima App">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+<!-- Web Manifest -->
 <link rel="manifest" href="manifest.json">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  
+<meta name="theme-color" content="#738271">
+
+<!-- Fontes Externe e Bibliotecas JS -->
+<link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 <script src="https://unpkg.com/html5-qrcode"></script>
 
 <style>
-/* Configurações Globais de Cores - Geridas dinamicamente pelo Tema */
 :root {
   --primary-color: #738271;
   --primary-hover: #8F9E8B;
@@ -25,20 +32,17 @@
   --text-dark: #2C3E2B;
   --accent-color: #E3E8E3;
 }
-
-/* Temas Disponíveis */
 body.theme-eucalyptus {
-  --primary-color: #738271; 
+  --primary-color: #738271;
   --primary-hover: #8F9E8B;
-  --bg-color: #F9F9F6;      
+  --bg-color: #F9F9F6;
   --card-bg: #ffffff;
   --card-border: #D1D8D1;
-  --text-dark: #242D24;     
+  --text-dark: #242D24;
   --accent-color: #EEF2EE;
 }
-
 body.theme-classic {
-  --primary-color: #b30059; 
+  --primary-color: #b30059;
   --primary-hover: #ff5c9e;
   --bg-color: #fff5f8;
   --card-bg: #ffffff;
@@ -46,47 +50,57 @@ body.theme-classic {
   --text-dark: #8b004f;
   --accent-color: #ffe6f0;
 }
-
 body.theme-gold {
-  --primary-color: #B39247; 
+  --primary-color: #B39247;
   --primary-hover: #D4AF37;
-  --bg-color: #FAF8F2;      
+  --bg-color: #FAF8F2;
   --card-bg: #ffffff;
   --card-border: #E6DCC3;
   --text-dark: #4A3C15;
   --accent-color: #F3ECE0;
 }
-
 body.theme-blue {
-  --primary-color: #4A6B82; 
+  --primary-color: #4A6B82;
   --primary-hover: #638A9F;
-  --bg-color: #F0F4F8;      
+  --bg-color: #F0F4F8;
   --card-bg: #ffffff;
   --card-border: #C8D6E5;
   --text-dark: #233845;
   --accent-color: #E1E8F0;
 }
 
+/* Otimização Nativa iOS/Android */
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
+}
+
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   background: var(--bg-color);
-  padding: 12px;
+  padding: env(safe-area-inset-top) 12px env(safe-area-inset-bottom) 12px;
   margin: 0;
   transition: background 0.2s ease;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+input, select, textarea {
+  -webkit-user-select: text;
+  user-select: text;
 }
 
 .hidden { display: none !important; }
 
-/* Cabeçalhos Premium */
 h1.main-title {
   text-align: center;
   color: var(--primary-color);
-  margin: 4px 0;
+  margin: 8px 0 4px 0;
   font-size: 38px;
   font-family: 'Alex Brush', cursive;
   transition: color 0.3s;
 }
-
 h2, h3, h4 {
   text-align: center;
   color: var(--primary-color);
@@ -96,11 +110,10 @@ h2, h3, h4 {
   letter-spacing: 1px;
   transition: color 0.3s;
 }
-
 h2 { font-size: 22px; }
 h3 { font-size: 18px; }
 
-/* Elementos de Formulário */
+/* Inputs com tamanho de fonte de 16px para evitar auto-zoom em iOS */
 input, select, button, textarea {
   width: 100%;
   max-width: 400px;
@@ -108,18 +121,16 @@ input, select, button, textarea {
   margin: 8px auto 0 auto;
   padding: 12px;
   border-radius: 16px;
-  font-size: 14px;
+  font-size: 16px;
   box-sizing: border-box;
   border: 1px solid var(--card-border);
   background: var(--card-bg);
   color: var(--text-dark);
 }
-
 input:focus, select:focus, textarea:focus {
   outline: none;
   border: 2px solid var(--primary-color);
 }
-
 button {
   background: var(--primary-color);
   color: #fff;
@@ -129,14 +140,8 @@ button {
   cursor: pointer;
   transition: background 0.2s, transform 0.1s;
 }
-
-button:hover {
-  background: var(--primary-hover);
-}
-
-button:active {
-  transform: scale(0.98);
-}
+button:hover { background: var(--primary-hover); }
+button:active { transform: scale(0.97); }
 
 button.green { background: #008000; color: white; }
 button.green:hover { background: #009900; }
@@ -144,9 +149,8 @@ button.red { background: #c00; color: white; }
 button.red:hover { background: #e00; }
 button.orange { background: #ff8c00; color: white; }
 button.orange:hover { background: #ffa500; }
-button.small { font-size: 12px; padding: 10px; margin: 6px auto; width: auto; display: inline-block; }
+button.small { font-size: 13px; padding: 10px; margin: 6px auto; width: auto; display: inline-block; }
 
-/* Cartões com sombras suaves */
 .card {
   background: var(--card-bg);
   border-radius: 16px;
@@ -157,16 +161,12 @@ button.small { font-size: 12px; padding: 10px; margin: 6px auto; width: auto; di
   box-sizing: border-box;
   transition: border 0.3s, background 0.3s;
 }
-
 .card-clicavel {
   cursor: pointer;
   transition: transform 0.2s, background-color 0.2s;
 }
-.card-clicavel:active {
-  transform: scale(0.98);
-}
+.card-clicavel:active { transform: scale(0.98); }
 
-/* Seletor de Temas e Configuração no Painel Admin */
 .admin-config-box {
   background: var(--accent-color);
   padding: 14px;
@@ -183,7 +183,6 @@ button.small { font-size: 12px; padding: 10px; margin: 6px auto; width: auto; di
   text-align: left;
 }
 
-/* Grelhas Responsivas */
 .grid-convidados-admin {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -196,7 +195,6 @@ button.small { font-size: 12px; padding: 10px; margin: 6px auto; width: auto; di
 @media (min-width: 1024px) {
   .grid-convidados-admin { grid-template-columns: repeat(5, 1fr); }
 }
-
 .grid-convidados-proto {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -204,50 +202,39 @@ button.small { font-size: 12px; padding: 10px; margin: 6px auto; width: auto; di
   margin-top: 15px;
 }
 
-/* Modais Dinâmicos */
 .modal {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
   display: none;
   align-items: center;
   justify-content: center;
   z-index: 999;
 }
-
 .modal.show { display: flex !important; }
-
 .modal-box {
   background: var(--card-bg);
   width: 96%;
   max-height: 90%;
   overflow-y: auto;
   border-radius: 18px;
-  padding: 20px 28px 20px 20px;
+  padding: 20px 24px 20px 20px;
   position: relative;
   border: 2px solid var(--primary-color);
   box-sizing: border-box;
 }
-
-#modalLista .modal-box {
-  width: 98%;
-  max-width: 1400px;
-}
-
+#modalLista .modal-box { width: 98%; max-width: 1400px; }
 .close {
   position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 22px;
+  top: 10px; right: 15px;
+  font-size: 24px;
   color: var(--primary-color);
   cursor: pointer;
   font-weight: bold;
   z-index: 10;
 }
-
 .counter {
   background: var(--accent-color);
   padding: 10px;
@@ -257,339 +244,109 @@ button.small { font-size: 12px; padding: 10px; margin: 6px auto; width: auto; di
   margin-bottom: 10px;
   color: var(--text-dark);
 }
-
-.instrucoes-box {
-  max-width: 650px;
-  margin: 0 auto;
-  text-align: left;
-}
-.instrucoes-box p {
-  font-size: 13px;
-  line-height: 1.5;
-  color: #333;
-}
+.instrucoes-box { max-width: 650px; margin: 0 auto; text-align: left; }
+.instrucoes-box p { font-size: 13px; line-height: 1.5; color: #333; }
 .instrucoes-box h4 {
-  font-family: 'Arial', sans-serif;
-  text-align: left;
-  font-size: 15px;
-  margin-top: 15px;
+  font-size: 15px; margin-top: 15px;
   border-bottom: 1px solid var(--card-border);
   padding-bottom: 4px;
 }
-
 p { color: var(--text-dark); margin: 6px 0; }
 
 .qr-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 6px 0;
-  background: #fdfdfd;
-  padding: 4px;
-  border: 1px dashed var(--card-border);
-  border-radius: 8px;
+  display: flex; justify-content: center; align-items: center;
+  margin: 6px 0; background: #fdfdfd; padding: 4px;
+  border: 1px dashed var(--card-border); border-radius: 8px;
   min-height: 95px;
 }
-.qr-container img {
-  display: block;
-  margin: 0 auto;
-  max-width: 90px;
-  max-height: 90px;
-}
+.qr-container img { display: block; margin: 0 auto; max-width: 90px; max-height: 90px; }
+
 #cameraWrapper {
-  width: 100%;
-  max-width: 400px;
-  margin: 10px auto;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #000;
+  width: 100%; max-width: 400px; margin: 10px auto;
+  border-radius: 12px; overflow: hidden; background: #000;
 }
 
-/* PRÉ-VISUALIZAÇÃO EM TELA CHEIA (FULLSCREEN OVERLAY) */
 .preview-fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: var(--bg-color);
-  z-index: 10001;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: var(--bg-color); z-index: 10001;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 20px; box-sizing: border-box; overflow-y: auto;
 }
-
 .preview-fullscreen-card {
   background: var(--card-bg);
   border: 3px solid var(--primary-color);
-  border-radius: 24px;
-  padding: 24px;
-  max-width: 450px;
-  width: 100%;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-  text-align: center;
-  box-sizing: border-box;
+  border-radius: 24px; padding: 24px; max-width: 450px; width: 100%;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2); text-align: center; box-sizing: border-box;
 }
 
-/* Anéis de Login */
-.login-aneis-container {
-  display: block;
-  margin: 18px auto;
-  height: 66px;
-  width: 96px; 
-  position: relative;
-}
+.login-aneis-container { display: block; margin: 18px auto; height: 66px; width: 96px; position: relative; }
 .anel-login {
-  width: 60px;
-  height: 60px;
-  border: 6px solid #d4af37;
-  border-radius: 50%;
-  position: absolute;
-  top: 0;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
-  box-sizing: border-box;
+  width: 60px; height: 60px; border: 6px solid #d4af37; border-radius: 50%;
+  position: absolute; top: 0; box-shadow: 0 3px 6px rgba(0,0,0,0.15); box-sizing: border-box;
 }
-.anel-login.esquerdo {
-  left: 0px; 
-  z-index: 1;
-}
-.anel-login.direito {
-  left: 36px; 
-  z-index: 2;
-  border-left-color: transparent; 
-}
+.anel-login.esquerdo { left: 0px; z-index: 1; }
+.anel-login.direito { left: 36px; z-index: 2; border-left-color: transparent; }
 .anel-login.direito::after {
-  content: "";
-  position: absolute;
-  top: -6px; left: -6px;
-  width: 60px; height: 60px;
-  border: 6px solid transparent;
-  border-left-color: #d4af37;
-  border-radius: 50%;
-  transform: rotate(30deg);
-  box-sizing: border-box;
+  content: ""; position: absolute; top: -6px; left: -6px;
+  width: 60px; height: 60px; border: 6px solid transparent;
+  border-left-color: #d4af37; border-radius: 50%; transform: rotate(30deg); box-sizing: border-box;
 }
 
-/* Estrutura Login */
-#login {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; 
-  min-height: 94vh;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 20px 10px;
+#login, #protocolo {
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 94vh; box-sizing: border-box; width: 100%; max-width: 420px;
+  margin: 0 auto; padding: 20px 10px;
 }
-
-.login-form-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-  justify-content: center; 
+.login-form-content, .protocolo-content {
+  width: 100%; display: flex; flex-direction: column; align-items: center; flex-grow: 1; justify-content: center;
 }
-
-.login-footer-content {
-  width: 100%;
-  margin-top: 40px; 
-}
-
-/* Estrutura Protocolo */
-#protocolo {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; 
-  min-height: 94vh;
-  box-sizing: border-box;
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 20px 10px;
-}
-
-.protocolo-content {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-grow: 1;
-}
+.login-footer-content, .protocolo-footer-content { width: 100%; margin-top: 40px; }
 
 .protocolo-botoes-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  width: 100%;
-  max-width: 400px;
-  margin: 12px auto 0 auto;
+  display: flex; flex-wrap: wrap; justify-content: center; gap: 8px;
+  width: 100%; max-width: 400px; margin: 12px auto 0 auto;
 }
-.protocolo-botoes-container button {
-  flex: 1 1 calc(50% - 8px); 
-  min-width: 120px;
-  margin: 0 !important; 
-}
+.protocolo-botoes-container button { flex: 1 1 calc(50% - 8px); min-width: 120px; margin: 0 !important; }
 
-.protocolo-footer-content {
-  width: 100%;
-  margin-top: 40px; 
-}
+.social-block { display: flex; justify-content: center; align-items: center; gap: 25px; margin-top: 15px; width: 100%; }
+.social-icon { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+.social-icon svg { width: 100%; height: 100%; fill: var(--primary-color); transition: fill 0.3s; }
+.social-icon:hover { transform: scale(1.15); opacity: 0.85; }
 
-/* ÍCONES DAS REDES SOCIAIS OFFLINE (SVG EMBUTIDO DA APLICAÇÃO) */
-.social-block {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 25px;
-  margin-top: 15px;
-  width: 100%;
-}
-.social-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  text-decoration: none;
-  transition: transform 0.2s, opacity 0.2s;
-}
-.social-icon svg {
-  width: 100%;
-  height: 100%;
-  fill: var(--primary-color);
-  transition: fill 0.3s;
-}
-.social-icon:hover {
-  transform: scale(1.15);
-  opacity: 0.85;
-}
+.kudima-footer { text-align: center; font-size: 11px; color: var(--text-dark); opacity: 0.8; margin-top: 10px; font-weight: bold; }
 
-.kudima-footer {
-  text-align: center;
-  font-size: 11px;
-  color: var(--text-dark);
-  opacity: 0.8;
-  margin-top: 10px;
-  font-weight: bold;
-}
+.tabela-registos { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 10px; }
+.tabela-registos th, .tabela-registos td { border: 1px solid var(--card-border); padding: 8px; text-align: left; }
+.tabela-registos th { background-color: var(--accent-color); color: var(--text-dark); }
 
-.tabela-registos {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12px;
-  margin-top: 10px;
-}
-.tabela-registos th, .tabela-registos td {
-  border: 1px solid var(--card-border);
-  padding: 8px;
-  text-align: left;
-}
-.tabela-registos th {
-  background-color: var(--accent-color);
-  color: var(--text-dark);
-}
-
-/* MODAL DE PROCESSAMENTO */
 #modalProcessamento {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+  display: none; align-items: center; justify-content: center; z-index: 10000;
 }
-#modalProcessamento.show {
-  display: flex !important;
-}
+#modalProcessamento.show { display: flex !important; }
 .spinner-container {
-  background: var(--card-bg);
-  border: 2px solid var(--primary-color);
-  padding: 24px 32px;
-  border-radius: 20px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  max-width: 320px;
-  width: 85%;
-  box-sizing: border-box;
+  background: var(--card-bg); border: 2px solid var(--primary-color);
+  padding: 24px 32px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  text-align: center; max-width: 320px; width: 85%; box-sizing: border-box;
 }
 .spinner-circular {
-  width: 50px;
-  height: 50px;
-  border: 4px solid var(--card-border);
-  border-top: 4px solid var(--primary-color);
-  border-radius: 50%;
-  margin: 0 auto 16px auto;
-  animation: spinEffect 1s linear infinite;
+  width: 50px; height: 50px; border: 4px solid var(--card-border);
+  border-top: 4px solid var(--primary-color); border-radius: 50%;
+  margin: 0 auto 16px auto; animation: spinEffect 1s linear infinite;
 }
-.spinner-text {
-  font-family: 'Cinzel', serif;
-  font-size: 15px;
-  color: var(--text-dark);
-  font-weight: bold;
-  letter-spacing: 0.5px;
-  margin: 0;
-}
-@keyframes spinEffect {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+.spinner-text { font-family: 'Cinzel', serif; font-size: 15px; color: var(--text-dark); font-weight: bold; letter-spacing: 0.5px; margin: 0; }
+@keyframes spinEffect { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-/* BARRA DE PROGRESSO */
 .progress-container {
-  width: 100%;
-  background-color: var(--accent-color);
-  border-radius: 12px;
-  overflow: hidden;
-  border: 1px solid var(--card-border);
-  margin-top: 12px;
-  height: 22px;
-  position: relative;
+  width: 100%; background-color: var(--accent-color); border-radius: 12px;
+  overflow: hidden; border: 1px solid var(--card-border); margin-top: 12px; height: 22px; position: relative;
 }
-.progress-bar {
-  width: 0%;
-  height: 100%;
-  background-color: var(--primary-color);
-  transition: width 0.1s linear;
-}
-.progress-text {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 11px;
-  font-weight: bold;
-  color: var(--text-dark);
-}
+.progress-bar { width: 0%; height: 100%; background-color: var(--primary-color); transition: width 0.1s linear; }
+.progress-text { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; color: var(--text-dark); }
 
-.share-buttons-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 8px;
-  margin-top: 10px;
-  max-width: 400px;
-}
-.share-buttons-grid button {
-  margin-top: 0;
-  font-size: 12px;
-  padding: 8px 10px;
-}
+.share-buttons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; max-width: 400px; }
+.share-buttons-grid button { margin-top: 0; font-size: 12px; padding: 8px 10px; }
 </style>
 </head>
 <body class="theme-eucalyptus">
@@ -599,10 +356,11 @@ p { color: var(--text-dark); margin: 6px 0; }
 <div id="modalProcessamento">
   <div class="spinner-container">
     <div class="spinner-circular"></div>
-    <p class="spinner-text" id="txtProcessamentoMsg">Espera um pouquinho…</p>
+    <p class="spinner-text" id="txtProcessamentoMsg">Aguarde um momento...</p>
   </div>
 </div>
 
+<!-- TELA LOGIN -->
 <div id="login">
   <div class="login-form-content">
     <div class="login-aneis-container">
@@ -610,19 +368,14 @@ p { color: var(--text-dark); margin: 6px 0; }
       <div class="anel-login direito"></div>
     </div>
     <h1 class="main-title casal-titulo-dinamico" style="width:100%;">Carregando...</h1>
-    <h2 style="width:100%;">Gestão de Evento</h2>
-    
+    <h2 style="width:100%;">Gestão de Eventos Kudima</h2>
     <input id="user" placeholder="Usuário" autocomplete="off">
     <input id="pass" type="password" placeholder="Senha" autocomplete="new-password">
-    
     <button type="button" onclick="iniciarProcessoLogin()">Acessar</button>
-    
     <p style="text-align:center;cursor:pointer;margin-top:16px; font-size:14px;" onclick="show('protoRegister')">Criar conta Protocolo/Portaria</p>
     <p style="text-align:center;cursor:pointer;margin-top:6px; font-size:14px;" onclick="show('apoio')">Apoio técnico</p>
   </div>
-  
   <div class="login-footer-content">
-    <!-- BLOCO SOCIAL COM ÍCONES OFFLINE EMBUTIDOS -->
     <div class="social-block">
       <a href="https://www.facebook.com/NicolauKudima?mibextid=wwXIfr&mibextid=wwXIfr" target="_blank" class="social-icon" title="Facebook">
         <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -638,69 +391,67 @@ p { color: var(--text-dark); margin: 6px 0; }
   </div>
 </div>
 
+<!-- TELA APOIO TÉCNICO -->
 <div id="apoio" class="hidden">
   <div class="card instrucoes-box">
     <h3>Manual de Apoio Técnico</h3>
     <p style="text-align:center; font-weight:bold; margin-bottom:15px;">Guia Completo de Operação do Aplicativo</p>
-    
-    <h4>🌐 Rede e Conectividade Inicial</h4>
-    <p>1️⃣ Ative o Hotspot (Ponto de Acesso) do telemóvel principal.</p>
-    <p>2️⃣ Conecte os telemóveis da equipa de Protocolo/Portaria à mesma rede Wi-Fi criada.</p>
-    <p>3️⃣ Abra o aplicativo no navegador de todos os dispositivos.</p>
-
-    <h4>🔑 Tela de Login e Acessos</h4>
-    <p>• <b>Botão Acessar:</b> Valida as credenciais após o processamento. Se for Admin, entra no painel de controlo. Se for Protocolo/Portaria aprovado, entra na tela de leitura.</p>
-    <p>• <b>Criar conta Protocolo/Portaria:</b> Permite que a equipa de portaria registe o seu próprio utilizador e palavra-passe (ficam pendentes de aprovação do Admin).</p>
-
-    <h4>⚡ Painel do Admin (Opções e Botões)</h4>
-    <p>• <b>➕ Adicionar Convidado:</b> Abre o formulário para inserir Nome, Mesa, Grau de parentesco e Total de Acompanhantes.</p>
-    <p>• <b>📋 Lista Convidados:</b> Abre o painel geral. Permite monitorizar presenças, exportar o QR Code individual, editar dados ou apagar. Contém também o botão <b>Baixar PDF Otimizado</b> para gerar a listagem física oficial do evento.</p>
-    <p>• <b>👥 Protocolos/Portarias:</b> Gira as contas da equipa. Aprove os acessos e clique em "Enviar Lista" para carregar os convidados atuais para o telemóvel do Protocolo/Portaria.</p>
-
+    <h4>Rede e Conectividade Inicial</h4>
+    <p>• Ative o Ponto de Acesso (Hotspot) do telemóvel principal.</p>
+    <p>• Conecte os telemóveis da equipa de Protocolo/Portaria à mesma rede Wi-Fi.</p>
+    <p>• Abra o aplicativo no navegador de todos os dispositivos.</p>
+    <h4>Tela de Login e Acessos</h4>
+    <p>• <b>Botão Acessar:</b> Valida as credenciais. Se for Admin, entra no painel de controlo. Se for Protocolo/Portaria aprovado, entra na leitura de QR Code.</p>
+    <p>• <b>Criar conta Protocolo/Portaria:</b> Permite registar novas contas da equipa que ficam pendentes de aprovação.</p>
+    <h4>Painel do Admin</h4>
+    <p>• <b>Adicionar Convidado:</b> Inserir Nome, Mesa, Grau de Relação e Acompanhantes.</p>
+    <p>• <b>Lista Convidados:</b> Visualizar presenças, baixar PDF otimizado e exportar QR Code individual.</p>
+    <p>• <b>Sincronizar Dados:</b> Partilhar e importar cadastros offline via código criptografado.</p>
     <hr style="border-top: 1px dashed var(--card-border); margin-top:20px;">
-    <button type="button" onclick="show('login')">⬅ Voltar ao Login</button>
+    <button type="button" onclick="show('login')">Voltar ao Login</button>
   </div>
 </div>
 
+<!-- TELA REGISTO DE PROTOCOLO -->
 <div id="protoRegister" class="hidden">
   <h2>Criar Conta Protocolo/Portaria</h2>
   <input id="rUser" placeholder="Usuário (Apenas letras)" autocomplete="off">
   <input id="rPass" type="password" autocomplete="new-password" placeholder="Senha (Mínimo 4 caracteres)">
-  <button type="button" onclick="registerProto()">Criar</button>
+  <button type="button" onclick="registerProto()">Criar Conta</button>
   <button type="button" onclick="show('login')">Voltar</button>
 </div>
 
+<!-- TELA ADMIN -->
 <div id="admin" class="hidden">
   <h1 class="main-title casal-titulo-dinamico" style="font-size:32px;">Carregando...</h1>
   <h3>Painel Admin</h3>
   <p style="text-align:center;"><b>Usuário:</b> <span id="adminNome"></span></p>
   
   <div id="areaRecemRegistrado"></div>
-
+  
   <div class="card admin-config-box" style="max-width:400px; margin: 15px auto;">
-    <h4 style="margin: 0 0 10px 0; font-size:14px; text-align:left;">⚙️ Configurações de Identidade</h4>
-    
-    <label for="inputNomeCasal">Nomes do Casal (Para o Título e PDF):</label>
+    <h4 style="margin: 0 0 10px 0; font-size:14px; text-align:left;">Configurações de Identidade</h4>
+    <label for="inputNomeCasal">Nomes do Casal (Para Título e PDF):</label>
     <input id="inputNomeCasal" placeholder="Ex: Tomás & Engrácia" oninput="salvarNomeCasal(this.value)">
-
+    
     <label for="themeSelector">Tema Visual do Casamento:</label>
     <select id="themeSelector" onchange="mudarTema(this.value)">
-      <option value="eucalyptus">🌿 Eucalyptus & Sage (Do Convite)</option>
-      <option value="classic">🌸 Rosa Imperial & Marsala</option>
-      <option value="gold">✨ Dourado Nobre & Marfim</option>
-      <option value="blue">❄️ Azul Sereno & Lavanda</option>
+      <option value="eucalyptus">Eucalyptus & Sage (Do Convite)</option>
+      <option value="classic">Rosa Imperial & Marsala</option>
+      <option value="gold">Dourado Nobre & Marfim</option>
+      <option value="blue">Azul Sereno & Lavanda</option>
     </select>
   </div>
 
-  <button type="button" onclick="abrirAdd()">➕ Adicionar Convidado</button>
-  <button type="button" onclick="abrirListaConvidados()">📋 Lista Convidados</button>
-  <button type="button" onclick="abrirProtocolos()">👥 Protocolos/Portarias</button>
-  <button type="button" onclick="abrirSincronizacao()">🔄 Sincronizar Dados</button>
-  <button type="button" onclick="editarAdmin()">⚙️ Editar Admin</button>
-  <button type="button" class="red" onclick="limparTodaBaseDados()">🧹 Limpar Base de Dados (Novo Casamento)</button>
+  <button type="button" onclick="abrirAdd()">Adicionar Convidado</button>
+  <button type="button" onclick="abrirListaConvidados()">Lista Convidados</button>
+  <button type="button" onclick="abrirProtocolos()">Protocolos/Portarias</button>
+  <button type="button" onclick="abrirSincronizacao()">Sincronizar Dados</button>
+  <button type="button" onclick="editarAdmin()">Editar Admin</button>
+  <button type="button" class="red" onclick="limparTodaBaseDados()">Limpar Base de Dados (Novo Casamento)</button>
   
   <div id="boxProgressoLimpeza" class="hidden card" style="max-width:400px; margin: 15px auto;">
-    <p style="font-size:12px; font-weight:bold; text-align:center; margin:0 0 6px 0;">🧹 A limpar base de dados...</p>
+    <p style="font-size:12px; font-weight:bold; text-align:center; margin:0 0 6px 0;">A limpar base de dados...</p>
     <div class="progress-container">
       <div id="barraProgressoLimpeza" class="progress-bar" style="background-color: #c00;"></div>
       <div id="textoProgressoLimpeza" class="progress-text">0%</div>
@@ -708,8 +459,7 @@ p { color: var(--text-dark); margin: 6px 0; }
   </div>
 
   <button type="button" onclick="logout()">Sair</button>
-  
-  <!-- BLOCO SOCIAL COM ÍCONES OFFLINE EMBUTIDOS -->
+
   <div class="social-block">
     <a href="https://www.facebook.com/NicolauKudima?mibextid=wwXIfr&mibextid=wwXIfr" target="_blank" class="social-icon" title="Facebook">
       <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -724,45 +474,40 @@ p { color: var(--text-dark); margin: 6px 0; }
   <div class="kudima-footer">Desenvolvido por Kudima &copy; <span class="kudima-ano"></span></div>
 </div>
 
+<!-- MODAL SINCRONIZAR -->
 <div id="modalSincronizar" class="modal">
   <div class="modal-box" style="max-width: 600px;">
     <div class="close" onclick="fecharModal('modalSincronizar')">✖</div>
-    <h3>🔄 Sincronizar Dados</h3>
-    
+    <h3>Sincronizar Dados</h3>
     <div style="background: var(--accent-color); padding: 12px; border-radius: 12px; border: 1px solid var(--card-border); font-size: 12px; text-align: left; margin-bottom: 15px; color: var(--text-dark);">
-      <b>💡 Sincronização Dinâmica:</b> Copie ou partilhe o código gerado para exportar todos os convidados, contas de Protocolo/Portaria, nome do casal e o tema ativo para outro telemóvel.
+      <b>Sincronização Dinâmica:</b> Copie ou partilhe o código gerado para exportar todos os convidados, contas de Protocolo/Portaria, nome do casal e o tema ativo para outro telemóvel.
     </div>
-
     <h4>1. Exportar deste dispositivo</h4>
     <button type="button" class="orange" onclick="exportarDados()">Gerar Código de Exportação</button>
     <textarea id="txtBackup" rows="3" placeholder="O código aparecerá aqui..." readonly onclick="this.select()"></textarea>
-    
     <div id="boxOpcoesPartilha" class="hidden">
       <p style="font-size:12px; font-weight:bold; margin-top:10px; margin-bottom:4px; text-align:center;">Opções de Partilha Direta:</p>
       <div class="share-buttons-grid">
-        <button type="button" class="green" onclick="partilharNativo()">🔗 Partilhar Geral</button>
-        <button type="button" style="background:#25D366; color:white;" onclick="partilharWhatsApp()">💬 WhatsApp</button>
-        <button type="button" style="background:#0082FC; color:white;" onclick="partilharBluetooth()">📶 Bluetooth</button>
-        <button type="button" class="orange" onclick="copiarCodigoExportacao()">📋 Copiar Código</button>
+        <button type="button" class="green" onclick="partilharNativo()">Partilhar Geral</button>
+        <button type="button" style="background:#25D366; color:white;" onclick="partilharWhatsApp()">WhatsApp</button>
+        <button type="button" style="background:#0082FC; color:white;" onclick="partilharBluetooth()">Bluetooth</button>
+        <button type="button" class="orange" onclick="copiarCodigoExportacao()">Copiar Código</button>
       </div>
     </div>
-    
     <hr style="border-top: 1px dashed var(--card-border); margin: 20px 0;">
-    
     <h4>2. Importar de outro dispositivo</h4>
     <textarea id="txtImportar" rows="3" placeholder="Cole o código recebido aqui..."></textarea>
-    
     <div id="boxProgressoSinc" class="hidden">
       <div class="progress-container">
         <div id="barraProgressoSinc" class="progress-bar"></div>
         <div id="textoProgressoSinc" class="progress-text">0%</div>
       </div>
     </div>
-
     <button type="button" id="btnImportarDados" class="green" onclick="importarDados()">Atualizar Dados Locais</button>
   </div>
 </div>
 
+<!-- MODAL EDITAR ADMIN -->
 <div id="modalAdminEdit" class="modal">
   <div class="modal-box" style="max-width:450px;">
     <div class="close" onclick="fecharModal('modalAdminEdit')">✖</div>
@@ -773,6 +518,7 @@ p { color: var(--text-dark); margin: 6px 0; }
   </div>
 </div>
 
+<!-- MODAL ADICIONAR CONVIDADO -->
 <div id="modalAdd" class="modal">
   <div class="modal-box" style="max-width:450px;">
     <div class="close" onclick="fecharModalAdd()">✖</div>
@@ -793,6 +539,7 @@ p { color: var(--text-dark); margin: 6px 0; }
   </div>
 </div>
 
+<!-- MODAL LISTA DE CONVIDADOS -->
 <div id="modalLista" class="modal">
   <div class="modal-box">
     <div class="close" onclick="fecharModal('modalLista')">✖</div>
@@ -800,10 +547,11 @@ p { color: var(--text-dark); margin: 6px 0; }
     <div id="contador" class="counter"></div>
     <div id="lista" class="grid-convidados-admin"></div>
     <br>
-    <button type="button" onclick="gerarPDF()" style="background:#008000; max-width: 400px; display: block; margin: 0 auto;">📄 Baixar PDF Otimizado</button>
+    <button type="button" onclick="gerarPDF()" style="background:#008000; max-width: 400px; display: block; margin: 0 auto;">Baixar PDF Otimizado</button>
   </div>
 </div>
 
+<!-- MODAL PROTOCOLOS -->
 <div id="modalProtocolos" class="modal">
   <div class="modal-box" style="max-width:600px;">
     <div class="close" onclick="fecharModal('modalProtocolos')">✖</div>
@@ -812,6 +560,7 @@ p { color: var(--text-dark); margin: 6px 0; }
   </div>
 </div>
 
+<!-- MODAL EDITAR CONTA PROTOCOLO -->
 <div id="modalProto" class="modal">
   <div class="modal-box" style="max-width:450px;">
     <div class="close" onclick="fecharModal('modalProto')">✖</div>
@@ -822,32 +571,30 @@ p { color: var(--text-dark); margin: 6px 0; }
   </div>
 </div>
 
+<!-- TELA PROTOCOLO -->
 <div id="protocolo" class="hidden">
   <div class="protocolo-content">
     <h1 class="main-title casal-titulo-dinamico" style="font-size:32px; width:100%;">Carregando...</h1>
     <h3 style="width:100%;">Protocolo/Portaria</h3>
     <p style="text-align:center; width:100%;"><b>Usuário:</b> <span id="protoNome"></span></p>
-    
     <input id="buscarId" placeholder="Pesquisar por ID" autocomplete="off">
     
     <div class="protocolo-botoes-container">
-      <button type="button" class="small" onclick="buscarPorId()">🔎 Buscar ID</button>
+      <button type="button" class="small" onclick="buscarPorId()">Buscar ID</button>
       <input type="file" id="arquivoQrNativo" accept="image/*" capture="environment" style="display:none;" onchange="lerQrDeArquivo(this)">
-      <button type="button" id="btnToggleCamera" class="small" onclick="toggleCamara()">📷 Ler QR</button>
-      <button type="button" class="small" onclick="abrirEditarProto()">✏️ Editar Perfil</button>
-      <button type="button" class="small" onclick="abrirListaRecebida()">📋 Lista Acesso</button>
-      <button type="button" class="small orange" onclick="abrirRegistosFeitos()">📝 Ver Registos</button>
+      <button type="button" id="btnToggleCamera" class="small" onclick="toggleCamara()">Ler QR</button>
+      <button type="button" class="small" onclick="abrirEditarProto()">Perfil</button>
+      <button type="button" class="small" onclick="abrirListaRecebida()">Lista Acesso</button>
+      <button type="button" class="small orange" onclick="abrirRegistosFeitos()">Ver Registos</button>
       <button type="button" class="small red" onclick="logout()" style="flex: 1 1 100%;">Sair</button>
     </div>
-    
+
     <div id="cameraWrapper" style="width:100%;"></div>
     <div id="containerAlternativo" style="width:100%;"></div>
-    
     <div id="resultadoBusca" style="width:100%;"></div>
   </div>
   
   <div class="protocolo-footer-content">
-    <!-- BLOCO SOCIAL COM ÍCONES OFFLINE EMBUTIDOS -->
     <div class="social-block">
       <a href="https://www.facebook.com/NicolauKudima?mibextid=wwXIfr&mibextid=wwXIfr" target="_blank" class="social-icon" title="Facebook">
         <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
@@ -863,31 +610,30 @@ p { color: var(--text-dark); margin: 6px 0; }
   </div>
 </div>
 
+<!-- MODAL LISTA RECEBIDA -->
 <div id="modalListaRecebida" class="modal">
   <div class="modal-box">
     <div class="close" onclick="fecharModal('modalListaRecebida')">✖</div>
     <h3>Lista de Acesso</h3>
-    <p style="text-align:center; font-size:12px; color:var(--primary-color); margin-bottom:10px;">👉 Clique em qualquer convidado para dar presença imediatamente!</p>
+    <p style="text-align:center; font-size:12px; color:var(--primary-color); margin-bottom:10px;">Clique em qualquer convidado para dar presença imediatamente!</p>
     <div id="listaRecebida" class="grid-convidados-proto"></div>
   </div>
 </div>
 
+<!-- MODAL REGISTOS -->
 <div id="modalRegistos" class="modal">
   <div class="modal-box" style="max-width:600px;">
     <div class="close" onclick="fecharModal('modalRegistos')">✖</div>
     <h3>Registos de Entrada Efetuados</h3>
     <p style="text-align:center; font-size:11px; color:gray;">Controlo cronológico das entradas validadas nesta portaria.</p>
-    
     <div id="tabelaRegistosContainer" style="overflow-x:auto; margin-top:10px;"></div>
-    
-    <button type="button" class="red small" onclick="limparHistoricoRegistos()" style="margin-top:15px; display:block;">🧹 Limpar Histórico de Registos</button>
+    <button type="button" class="red small" onclick="limparHistoricoRegistos()" style="margin-top:15px; display:block;">Limpar Histórico de Registos</button>
   </div>
 </div>
 
 <script>
 /* MÁSCARAS E VALIDAÇÕES ESTRITAS DE BLINDAGEM */
 function validarSomenteLetras(texto) {
-  // Aceita apenas letras (incluindo acentuadas) e espaços
   const regex = /^[a-zA-Za-zA-Za-zA-Za-zA-Za-zA-Za-zA-Za-zÀ-ÿ\s]+$/;
   return regex.test(texto);
 }
@@ -901,7 +647,8 @@ function mudarTema(tema) {
   document.body.className = '';
   document.body.classList.add('theme-' + tema);
   localStorage.setItem("temaAtivo", tema);
-  document.getElementById("themeSelector").value = tema;
+  let selector = document.getElementById("themeSelector");
+  if(selector) selector.value = tema;
 }
 
 function salvarNomeCasal(nome) {
@@ -916,9 +663,7 @@ function atualizarNomesDinamicos() {
     el.innerText = nome;
   });
   let inputCampo = document.getElementById("inputNomeCasal");
-  if(inputCampo) {
-    inputCampo.value = nome;
-  }
+  if(inputCampo) inputCampo.value = nome;
 }
 
 /* ATUALIZAÇÃO DO ANO ATUAL */
@@ -929,15 +674,12 @@ function atualizarAnoKudima() {
   });
 }
 
-/* RECARREGAR ESTADO FLUIDO (SEM TELA BRANCA) */
+/* RECARREGAR ESTADO FLUIDO */
 function recarregarEstadoApp() {
   let temaSalvo = localStorage.getItem("temaAtivo") || "eucalyptus";
   mudarTema(temaSalvo);
   atualizarNomesDinamicos();
-  
   let session = localStorage.getItem("userSession");
-  let screen = localStorage.getItem("currentScreen") || "login";
-
   if(session) {
     try {
       let sessObj = JSON.parse(session);
@@ -957,31 +699,24 @@ function recarregarEstadoApp() {
   }
 }
 
-/* LIMPAR BASE DE DADOS COM SEGURAÇA E BARRA DE PROGRESSO */
+/* LIMPAR BASE DE DADOS */
 function limparTodaBaseDados() {
   let adminObj = JSON.parse(localStorage.admin || '{"user":"admin","pass":"1234"}');
   let senhaAdminCorreta = adminObj.pass;
-
-  let primeiraConfirmacao = confirm("⚠️ ATENÇÃO: Isto irá APAGAR permanentemente todos os convidados cadastrados, todas as presenças e todas as contas de Protocolo/Portaria deste dispositivo.\n\nDeseja mesmo continuar?");
-  
+  let primeiraConfirmacao = confirm("ATENÇÃO: Isto irá APAGAR permanentemente todos os convidados cadastrados, todas as presenças e todas as contas de Protocolo/Portaria deste dispositivo.\n\nDeseja mesmo continuar?");
   if (primeiraConfirmacao) {
-    let senhaDigitada = prompt("🔒 Validação de Segurança do Admin:\nPara confirmar a limpeza geral, digite a sua SENHA DE ADMIN:");
-    
+    let senhaDigitada = prompt("Validação de Segurança do Admin:\nPara confirmar a limpeza geral, digite a sua SENHA DE ADMIN:");
     if (senhaDigitada === senhaAdminCorreta) {
       let boxProg = document.getElementById("boxProgressoLimpeza");
       let barra = document.getElementById("barraProgressoLimpeza");
       let texto = document.getElementById("textoProgressoLimpeza");
-      
       boxProg.classList.remove("hidden");
-      
       let progresso = 0;
       let intervalo = setInterval(() => {
         progresso += 4;
         if (progresso > 100) progresso = 100;
-        
         barra.style.width = progresso + "%";
         texto.innerText = progresso + "%";
-        
         if (progresso >= 100) {
           clearInterval(intervalo);
           setTimeout(() => {
@@ -990,28 +725,24 @@ function limparTodaBaseDados() {
             localStorage.registosEntrada = "[]";
             localStorage.nomeCasal = "Tomás & Engrácia";
             localStorage.setItem("temaAtivo", "eucalyptus");
-            
             localStorage.removeItem("recemRegistradoHTML");
             localStorage.removeItem("recemRegistradoID");
             localStorage.removeItem("currentModal");
-            
             boxProg.classList.add("hidden");
             barra.style.width = "0%";
             texto.innerText = "0%";
-            
-            alert("✅ Base de dados completamente limpa com sucesso!");
+            alert("Base de dados completamente limpa com sucesso!");
             recarregarEstadoApp();
           }, 200);
         }
       }, 25);
-
     } else if (senhaDigitada !== null) {
-      alert("❌ Senha do Admin incorreta. A base de dados NÃO foi alterada.");
+      alert("Senha do Admin incorreta. A base de dados NÃO foi alterada.");
     }
   }
 }
 
-/* INICIALIZAÇÃO DE VARIÁVEIS E BASE */
+/* INICIALIZAÇÃO DE VARIÁVEIS DE BASE */
 if(!localStorage.admin) localStorage.admin=JSON.stringify({user:"admin",pass:"1234"});
 if(!localStorage.guests) localStorage.guests="[]";
 if(!localStorage.protocolos) localStorage.protocolos="[]";
@@ -1067,7 +798,6 @@ function logout(){
   localStorage.removeItem("currentModal");
   localStorage.removeItem("recemRegistradoHTML");
   localStorage.removeItem("recemRegistradoID");
-  
   document.querySelectorAll(".modal").forEach(m => m.classList.remove("show"));
   document.getElementById("user").value = "";
   document.getElementById("pass").value = "";
@@ -1076,29 +806,24 @@ function logout(){
 
 function fecharScanner(){
   if(html5QrCodeEngine) {
-    try { 
+    try {
       html5QrCodeEngine.stop().then(() => {
         html5QrCodeEngine.clear();
         html5QrCodeEngine = null;
-      }).catch(err => {
-        html5QrCodeEngine = null;
-      });
-    } catch(e){
-      html5QrCodeEngine = null;
-    }
+      }).catch(err => { html5QrCodeEngine = null; });
+    } catch(e){ html5QrCodeEngine = null; }
   }
   let wrapper = document.getElementById("cameraWrapper");
   if(wrapper) wrapper.innerHTML = "";
   cameraAtiva = false;
-  
   let btnCam = document.getElementById("btnToggleCamera");
   if(btnCam) {
-    btnCam.innerText = "📷 Ler QR";
+    btnCam.innerText = "Ler QR";
     btnCam.classList.remove("red");
   }
 }
 
-/* SINCRONIZAÇÃO DADOS E OPÇÕES DE PARTILHA */
+/* SINCRONIZAÇÃO DADOS */
 function abrirSincronizacao(){
   abrirModal("modalSincronizar");
   document.getElementById("txtBackup").value = "";
@@ -1108,9 +833,9 @@ function abrirSincronizacao(){
 }
 
 function exportarDados(){
-  let dadosObj = { 
-    guests: localStorage.guests, 
-    copy_v: 2, 
+  let dadosObj = {
+    guests: localStorage.guests,
+    copy_v: 2,
     protocolos: localStorage.protocolos,
     nomeCasal: localStorage.nomeCasal,
     temaAtivo: localStorage.getItem("temaAtivo") || "eucalyptus"
@@ -1119,61 +844,50 @@ function exportarDados(){
   let txt = document.getElementById("txtBackup");
   txt.value = stringExport;
   document.getElementById("boxOpcoesPartilha").classList.remove("hidden");
-  alert("✅ Código de sincronização gerado com sucesso!");
+  alert("Código de sincronização gerado com sucesso!");
 }
 
 function partilharNativo() {
   let codigo = document.getElementById("txtBackup").value;
   if (!codigo) return alert("Gere o código primeiro.");
-  
   if (navigator.share) {
-    navigator.share({
-      title: 'Sincronização Casamento',
-      text: codigo
-    }).catch(err => {});
-  } else {
-    copiarCodigoExportacao();
-  }
+    navigator.share({ title: 'Sincronização Casamento', text: codigo }).catch(err => {});
+  } else { copiarCodigoExportacao(); }
 }
 
 function partilharWhatsApp() {
   let codigo = document.getElementById("txtBackup").value;
   if (!codigo) return alert("Gere o código primeiro.");
-  let msg = encodeURIComponent("📱 *CÓDIGO DE SINCRONIZAÇÃO CASAMENTO*\nCole este código no seu aplicativo para atualizar a lista:\n\n" + codigo);
+  let msg = encodeURIComponent("*CÓDIGO DE SINCRONIZAÇÃO CASAMENTO*\nCole este código no seu aplicativo para atualizar a lista:\n\n" + codigo);
   window.open("https://api.whatsapp.com/send?text=" + msg, "_blank");
 }
 
 function partilharBluetooth() {
   let codigo = document.getElementById("txtBackup").value;
   if (!codigo) return alert("Gere o código primeiro.");
-  
   if (navigator.share) {
-    navigator.share({
-      title: 'Partilhar via Bluetooth / Proximidade',
-      text: codigo
-    }).catch(err => {});
+    navigator.share({ title: 'Partilhar via Bluetooth / Proximidade', text: codigo }).catch(err => {});
   } else {
     copiarCodigoExportacao();
-    alert("ℹ️ Código copiado para a área de transferência! Ligue o Bluetooth para o enviar.");
+    alert("Código copiado para a área de transferência! Ligue o Bluetooth para o enviar.");
   }
 }
 
 function copiarCodigoExportacao() {
   let txt = document.getElementById("txtBackup");
   if (!txt.value) return alert("Gere o código primeiro.");
-  
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(txt.value).then(() => {
-      alert("📋 Código copiado para a área de transferência!");
+      alert("Código copiado para a área de transferência!");
     }).catch(() => {
       txt.select();
       document.execCommand("copy");
-      alert("📋 Código copiado!");
+      alert("Código copiado!");
     });
   } else {
     txt.select();
     document.execCommand("copy");
-    alert("📋 Código copiado!");
+    alert("Código copiado!");
   }
 }
 
@@ -1182,28 +896,22 @@ function abrirListaConvidados(){ abrirModal("modalLista"); renderLista(); }
 function importarDados(){
   let str = document.getElementById("txtImportar").value.trim();
   if(!str) return alert("Cole um código válido.");
-  
   try {
     let decorado = JSON.parse(decodeURIComponent(escape(atob(str))));
     if(decorado.guests && decorado.protocolos){
       if(confirm("Deseja substituir os dados locais pelos dados importados?")){
-        
         let boxProg = document.getElementById("boxProgressoSinc");
         let barra = document.getElementById("barraProgressoSinc");
         let texto = document.getElementById("textoProgressoSinc");
         let btnImp = document.getElementById("btnImportarDados");
-        
         boxProg.classList.remove("hidden");
         btnImp.disabled = true;
-        
         let progresso = 0;
         let intervalo = setInterval(() => {
           progresso += 2;
           if (progresso > 100) progresso = 100;
-          
           barra.style.width = progresso + "%";
           texto.innerText = progresso + "%";
-          
           if (progresso >= 100) {
             clearInterval(intervalo);
             setTimeout(() => {
@@ -1211,25 +919,23 @@ function importarDados(){
               localStorage.protocolos = decorado.protocolos;
               if(decorado.nomeCasal) localStorage.nomeCasal = decorado.nomeCasal;
               if(decorado.temaAtivo) localStorage.setItem("temaAtivo", decorado.temaAtivo);
-              
               btnImp.disabled = false;
               boxProg.classList.add("hidden");
               fecharModal("modalSincronizar");
-              alert("✅ Dados importados com sucesso a 100%!");
+              alert("Dados importados com sucesso a 100%!");
               recarregarEstadoApp();
             }, 250);
           }
         }, 20);
       }
-    } else { alert("❌ Código inválido."); }
-  } catch(e) { alert("❌ Falha ao processar código de sincronização."); }
+    } else { alert("Código inválido."); }
+  } catch(e) { alert("Falha ao processar código de sincronização."); }
 }
 
 /* INICIALIZAÇÃO */
 window.addEventListener("DOMContentLoaded", () => {
   atualizarAnoKudima();
   recarregarEstadoApp();
-  
   let modalActive = localStorage.getItem("currentModal");
   if(modalActive) {
     if(modalActive === "modalLista") { abrirListaConvidados(); }
@@ -1240,134 +946,106 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-/* INICIAR FLUXO DE LOGIN COM PROCESSAMENTO */
 function iniciarProcessoLogin() {
   const u=document.getElementById('user').value.trim();
   const p=document.getElementById('pass').value.trim();
   if(!u || !p) return alert("Por favor, preencha o usuário e a senha.");
-
   const modalProc = document.getElementById("modalProcessamento");
   modalProc.classList.add("show");
-
   setTimeout(() => {
     modalProc.classList.remove("show");
     executarValidacaoLogin(u, p);
-  }, 1000);
+  }, 800);
 }
 
 function executarValidacaoLogin(u, p) {
   const admin=JSON.parse(localStorage.admin);
   if(u===admin.user && p===admin.pass){
-    if(document.getElementById('adminNome')) document.getElementById('adminNome').innerText=u; 
+    if(document.getElementById('adminNome')) document.getElementById('adminNome').innerText=u;
     localStorage.setItem("userSession", JSON.stringify({role:"admin", user:u}));
-    show('admin'); 
+    show('admin');
     return;
   }
   let protos=JSON.parse(localStorage.protocolos);
   let proto=protos.find(x=>x.user===u && x.pass===p && x.ok);
   if(proto){
-    protoLogado=proto; 
-    if(document.getElementById('protoNome')) document.getElementById('protoNome').innerText=proto.user; 
+    protoLogado=proto;
+    if(document.getElementById('protoNome')) document.getElementById('protoNome').innerText=proto.user;
     localStorage.setItem("userSession", JSON.stringify({role:"protocolo", user:u, data:proto}));
-    show('protocolo'); 
+    show('protocolo');
     return;
   }
-  alert("❌ Usuário ou senha incorretos / conta não aprovada");
+  alert("Usuário ou senha incorretos / conta não aprovada");
 }
 
 function registerProto(){
   let u=document.getElementById('rUser').value.trim();
   let p=document.getElementById('rPass').value.trim();
-  
-  if(u === "" || p === "") {
-    return alert("❌ Erro: O Usuário e a Senha não podem ser vazios!");
-  }
-  
-  if(!validarSomenteLetras(u)) {
-    return alert("❌ Erro: O Usuário deve conter apenas letras e espaços!");
-  }
-
-  if(!validarSenhaMinima(p)) {
-    return alert("❌ Erro: A Senha deve conter no mínimo 4 caracteres!");
-  }
-  
+  if(u === "" || p === "") return alert("Erro: O Usuário e a Senha não podem ser vazios!");
+  if(!validarSomenteLetras(u)) return alert("Erro: O Usuário deve conter apenas letras e espaços!");
+  if(!validarSenhaMinima(p)) return alert("Erro: A Senha deve conter no mínimo 4 caracteres!");
   let l=JSON.parse(localStorage.protocolos);
   l.push({user:u,pass:p,ok:false,lista:[]});
   localStorage.protocolos=JSON.stringify(l);
-  alert("Conta criada. Aguarde aprovação."); 
+  alert("Conta criada. Aguarde aprovação.");
   document.getElementById('rUser').value = "";
   document.getElementById('rPass').value = "";
   show("login");
 }
 
 function editarAdmin(){
-  let a=JSON.parse(localStorage.admin); 
-  document.getElementById('editAdminUser').value=a.user; 
-  document.getElementById('editAdminPass').value=a.pass; 
+  let a=JSON.parse(localStorage.admin);
+  document.getElementById('editAdminUser').value=a.user;
+  document.getElementById('editAdminPass').value=a.pass;
   abrirModal('modalAdminEdit');
 }
 
 function salvarAdmin(){
   let u = document.getElementById('editAdminUser').value.trim();
   let p = document.getElementById('editAdminPass').value.trim();
-  
-  if(u === "" || p === "") {
-    return alert("❌ Erro: O Usuário e a Senha do Admin não podem ser deixados vazios!");
-  }
-
-  if(!validarSomenteLetras(u)) {
-    return alert("❌ Erro: O Usuário do Admin deve conter apenas letras e espaços!");
-  }
-
-  if(!validarSenhaMinima(p)) {
-    return alert("❌ Erro: A Senha do Admin deve conter no mínimo 4 caracteres!");
-  }
-  
-  let a={user:u,pass:p}; 
-  localStorage.admin=JSON.stringify(a); 
-  if(document.getElementById('adminNome')) document.getElementById('adminNome').innerText=a.user; 
-  alert("✅ Admin atualizado!"); 
+  if(u === "" || p === "") return alert("Erro: O Usuário e a Senha do Admin não podem ser deixados vazios!");
+  if(!validarSomenteLetras(u)) return alert("Erro: O Usuário do Admin deve conter apenas letras e espaços!");
+  if(!validarSenhaMinima(p)) return alert("Erro: A Senha do Admin deve conter no mínimo 4 caracteres!");
+  let a={user:u,pass:p};
+  localStorage.admin=JSON.stringify(a);
+  if(document.getElementById('adminNome')) document.getElementById('adminNome').innerText=a.user;
+  alert("Admin atualizado!");
   fecharModal('modalAdminEdit');
 }
 
 /* GESTÃO DE CONVIDADOS */
 function abrirAdd(){
-  editIndex=null; 
-  gNome.value=""; 
-  gMesa.value=""; 
-  gGrau.value="Família do Noivo"; 
+  editIndex=null;
+  gNome.value="";
+  gMesa.value="";
+  gGrau.value="Família do Noivo";
   gAcompanhantes.value="0";
   abrirModal("modalAdd");
 }
 
 function salvarConvidado(){
-  let nome=gNome.value.trim(), mesa=gMesa.value.trim(), grau=gGrau.value; 
+  let nome=gNome.value.trim(), mesa=gMesa.value.trim(), grau=gGrau.value;
   let acompanhantes = parseInt(gAcompanhantes.value) || 0;
-
-  if(!nome||!mesa) return alert("Preencha todos os campos obrigatórios"); 
-  
-  let l=JSON.parse(localStorage.guests); 
+  if(!nome||!mesa) return alert("Preencha todos os campos obrigatórios");
+  let l=JSON.parse(localStorage.guests);
   let convidadoId;
   let presenteStatus = false;
   let acompPresentes = 0;
-  
   if(editIndex!==null){
     convidadoId = l[editIndex].id;
     presenteStatus = l[editIndex].presente;
     acompPresentes = l[editIndex].acompanhantesPresentes || 0;
-    l[editIndex]={nome,mesa,grau,acompanhantes,acompanhantesPresentes:acompPresentes,id:convidadoId,presente:presenteStatus}; 
-    alert("✅ Convidado atualizado");
+    l[editIndex]={nome,mesa,grau,acompanhantes,acompanhantesPresentes:acompPresentes,id:convidadoId,presente:presenteStatus};
+    alert("Convidado atualizado");
   } else {
     convidadoId = "ID-" + Math.random().toString(36).substr(2,6).toUpperCase();
-    l.push({nome,mesa,grau,acompanhantes,acompanhantesPresentes:0,id:convidadoId,presente:false}); 
-  } 
-  
-  localStorage.guests=JSON.stringify(l); 
-  
+    l.push({nome,mesa,grau,acompanhantes,acompanhantesPresentes:0,id:convidadoId,presente:false});
+  }
+  localStorage.guests=JSON.stringify(l);
   let htmlCard = `
     <div class="preview-fullscreen">
       <div class="preview-fullscreen-card">
-        <h2 style="margin:4px 0; color:var(--primary-color);">🎉 Pré-visualização do Convidado</h2>
+        <h2 style="margin:4px 0; color:var(--primary-color);">Pré-visualização do Convidado</h2>
         <hr style="border-top: 1px dashed var(--card-border); margin: 15px 0;">
         <p style="font-size:16px;"><b>Nome:</b> ${nome} <br><small style="color:gray;">[${convidadoId}]</small></p>
         <p style="font-size:15px;"><b>Mesa:</b> ${mesa}</p>
@@ -1376,47 +1054,43 @@ function salvarConvidado(){
         <div class="qr-container" id="qrRecem" style="min-height:140px; margin: 15px 0;"></div>
         <button type="button" class="red" onclick="fecharRecemRegistrado()" style="margin-top:15px; width: 100%;">Fechar Pré-visualização</button>
       </div>
-    </div>
-  `;
-  
+    </div>`;
   if(areaRecemRegistrado) {
     areaRecemRegistrado.innerHTML = htmlCard;
     if(typeof QRCode !== "undefined") { new QRCode(document.getElementById("qrRecem"), { text: convidadoId, width: 130, height: 130 }); }
   }
   localStorage.setItem("recemRegistradoHTML", htmlCard);
   localStorage.setItem("recemRegistradoID", convidadoId);
-  
   gNome.value=""; gMesa.value=""; gGrau.value="Família do Noivo"; gAcompanhantes.value="0";
-  fecharModal("modalAdd"); 
-  
+  fecharModal("modalAdd");
   if(modalLista.classList.contains("show")) { renderLista(); }
 }
 
 function editarConvidado(i){
-  let l=JSON.parse(localStorage.guests); 
-  gNome.value=l[i].nome; 
-  gMesa.value=l[i].mesa; 
-  gGrau.value=l[i].grau || "Família do Noivo"; 
+  let l=JSON.parse(localStorage.guests);
+  gNome.value=l[i].nome;
+  gMesa.value=l[i].mesa;
+  gGrau.value=l[i].grau || "Família do Noivo";
   gAcompanhantes.value=l[i].acompanhantes || 0;
-  editIndex=i; 
-  fecharModal("modalLista"); 
+  editIndex=i;
+  fecharModal("modalLista");
   abrirModal("modalAdd");
 }
 
 function excluirConvidado(i){
-  if(!confirm("Deseja excluir este convidado?")) return; 
-  let l=JSON.parse(localStorage.guests); 
-  l.splice(i,1); 
-  localStorage.guests=JSON.stringify(l); 
+  if(!confirm("Deseja excluir este convidado?")) return;
+  let l=JSON.parse(localStorage.guests);
+  l.splice(i,1);
+  localStorage.guests=JSON.stringify(l);
   renderLista();
 }
 
 function renderLista(){
-  let l=JSON.parse(localStorage.guests); 
+  let l=JSON.parse(localStorage.guests);
   let totalAcompPermitidos = l.reduce((sum, c) => sum + (parseInt(c.acompanhantes) || 0), 0);
   let totalAcompPresentes = l.reduce((sum, c) => sum + (parseInt(c.acompanhantesPresentes) || 0), 0);
-  if(contador) contador.innerText=`Titulares: ${l.length} | Acomp. Entrados: ${totalAcompPresentes}/${totalAcompPermitidos} | Presenças: ${l.filter(x=>x.presente).length}`; 
-  lista.innerHTML=""; 
+  if(contador) contador.innerText=`Titulares: ${l.length} | Acomp. Entrados: ${totalAcompPresentes}/${totalAcompPermitidos} | Presenças: ${l.filter(x=>x.presente).length}`;
+  lista.innerHTML="";
   if(l.length === 0){
     lista.innerHTML = `<p style="text-align:center; grid-column: 1 / -1; color:var(--primary-color);">Nenhum convidado cadastrado.</p>`;
     return;
@@ -1435,13 +1109,13 @@ function renderLista(){
         <div>
           <div class="qr-container" id="qr-lista-${i}"></div>
           <div style="text-align:center; display: flex; justify-content: center; gap: 4px;">
-            <button type="button" class="small" style="padding: 4px 6px; font-size: 10px; margin: 0;" onclick="baixarQR(${i})">📥</button>
-            <button type="button" class="small green" style="padding: 4px 6px; font-size: 10px; margin: 0;" onclick="editarConvidado(${i})">✏️</button>
-            <button type="button" class="small red" style="padding: 4px 6px; font-size: 10px; margin: 0;" onclick="excluirConvidado(${i})">🗑️</button>
+            <button type="button" class="small" style="padding: 4px 6px; font-size: 10px; margin: 0;" onclick="baixarQR(${i})">Baixar QR</button>
+            <button type="button" class="small green" style="padding: 4px 6px; font-size: 10px; margin: 0;" onclick="editarConvidado(${i})">Editar</button>
+            <button type="button" class="small red" style="padding: 4px 6px; font-size: 10px; margin: 0;" onclick="excluirConvidado(${i})">Apagar</button>
           </div>
         </div>
       </div>`;
-  }); 
+  });
   l.forEach((c, i)=>{
     let container = document.getElementById(`qr-lista-${i}`);
     if(container && typeof QRCode !== "undefined") { new QRCode(container, { text: c.id, width: 85, height: 85 }); }
@@ -1449,12 +1123,12 @@ function renderLista(){
 }
 
 function baixarQR(i){
-  let canvas = document.querySelector(`#qr-lista-${i} canvas`); 
-  if(!canvas) return alert("Erro ao obter o QR code."); 
-  let link = document.createElement("a"); 
+  let canvas = document.querySelector(`#qr-lista-${i} canvas`);
+  if(!canvas) return alert("Erro ao obter o QR code.");
+  let link = document.createElement("a");
   let nome = JSON.parse(localStorage.guests)[i].nome;
-  link.href = canvas.toDataURL("image/png"); 
-  link.download = `QR_${nome.replace(/\s+/g, '_')}.png`; 
+  link.href = canvas.toDataURL("image/png");
+  link.download = `QR_${nome.replace(/\s+/g, '_')}.png`;
   link.click();
 }
 
@@ -1463,68 +1137,50 @@ function gerarPDF() {
   if(typeof window.jspdf === "undefined") return alert("Aguarde o carregamento completo da biblioteca PDF.");
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF('p', 'mm', 'a4');
-  
   const nomeCasalDoc = localStorage.getItem("nomeCasal") || "Tomás & Engrácia";
-  const colunas = ["Nº", "Nome do Convidado [ID]", "Mesa", "Grau de Relação", "Acomp.", "Status"];
+  const colunas = ["No", "Nome do Convidado [ID]", "Mesa", "Grau de Relação", "Acomp.", "Status"];
   const lines = [];
-  
   doc.setLineWidth(0.8);
   doc.setDrawColor(212, 175, 55);
   doc.circle(102, 22, 5.5, 'D');
-  doc.circle(106, 22, 5.5, 'D'); 
-  
+  doc.circle(106, 22, 5.5, 'D');
   doc.setFont("helvetica", "bold");
   doc.setFontSize(24);
   doc.setTextColor(115, 130, 113);
   doc.text(nomeCasalDoc, 105, 38, { align: "center" });
-  
   doc.setFont("helvetica", "normal");
   doc.setFontSize(13);
   doc.setTextColor(60, 60, 60);
   doc.text("Lista de Acesso ao Evento", 105, 46, { align: "center" });
-  
   doc.setLineWidth(0.3);
-  doc.setDrawColor(185, 195, 183); 
+  doc.setDrawColor(185, 195, 183);
   doc.line(20, 52, 190, 52);
-  
   let g = JSON.parse(localStorage.guests || "[]");
   let total = g.length;
   let presentes = g.filter(x => x.presente).length;
   let totalAcompPresentes = g.reduce((sum, c) => sum + (parseInt(c.acompanhantesPresentes) || 0), 0);
   let totalAcompPermitidos = g.reduce((sum, c) => sum + (parseInt(c.acompanhantes) || 0), 0);
-  
   doc.setFontSize(10);
   doc.setTextColor(100, 100, 100);
   doc.text(`Titulares: ${total}   |   Acomp.: ${totalAcompPresentes}/${totalAcompPermitidos}   |   Confirmados: ${presentes}`, 20, 60);
-  
   g.forEach((c, index) => {
     lines.push([
       index + 1,
-      `${c.nome} [${c.id}]`, 
+      `${c.nome} [${c.id}]`,
       c.mesa,
       c.grau || '-',
       `${c.acompanhantesPresentes || 0}/${c.acompanhantes || 0}`,
       c.presente ? "Presente" : "Ausente"
     ]);
   });
-  
   doc.autoTable({
     head: [colunas],
-    body: lines, 
+    body: lines,
     startY: 65,
     margin: { left: 15, right: 15 },
     theme: 'striped',
-    headStyles: {
-      fillColor: [115, 130, 113],
-      textColor: [255, 255, 255],
-      fontStyle: 'bold',
-      halign: 'center',
-      fontSize: 9.5
-    },
-    bodyStyles: {
-      textColor: [60, 60, 60],
-      fontSize: 9
-    },
+    headStyles: { fillColor: [115, 130, 113], textColor: [255, 255, 255], fontStyle: 'bold', halign: 'center', fontSize: 9.5 },
+    bodyStyles: { textColor: [60, 60, 60], fontSize: 9 },
     columnStyles: {
       0: { halign: 'center', cellWidth: 12 },
       1: { halign: 'left' },
@@ -1536,72 +1192,65 @@ function gerarPDF() {
     didParseCell: function(data) {
       if (data.section === 'body' && data.column.index === 5) {
         if (data.cell.raw === "Presente") {
-          data.cell.styles.textColor = [0, 128, 0]; 
+          data.cell.styles.textColor = [0, 128, 0];
           data.cell.styles.fontStyle = 'bold';
         } else {
-          data.cell.styles.textColor = [255, 140, 0]; 
+          data.cell.styles.textColor = [255, 140, 0];
         }
       }
     },
-    alternateRowStyles: {
-      fillColor: [244, 246, 244] 
-    }
+    alternateRowStyles: { fillColor: [244, 246, 244] }
   });
-  
   const nomeSeguro = nomeCasalDoc.replace(/\s+/g, '_').replace(/&/g, 'e');
   doc.save(`Lista_Convidados_${nomeSeguro}.pdf`);
 }
 
 /* PROTOCOLOS */
 function abrirProtocolos(){abrirModal("modalProtocolos"); renderProtocolos();}
-
 function renderProtocolos(){
-  let l=JSON.parse(localStorage.protocolos); 
-  document.getElementById("listaProtocolos").innerHTML=""; 
+  let l=JSON.parse(localStorage.protocolos);
+  document.getElementById("listaProtocolos").innerHTML="";
   l.forEach((p,i)=>{
-    let status=p.ok?"✅ Aprovado":"❌ Pendente"; 
-    let btnText=p.ok?"📤 Enviar Lista":"✅ Aprovar"; 
+    let status=p.ok?"Aprovado":"Pendente";
+    let btnText=p.ok?"Enviar Lista":"Aprovar";
     document.getElementById("listaProtocolos").innerHTML+=`
       <div class="card">
         <b>${p.user}</b><br>
         Senha: <span style="font-family: monospace; background:#eee; padding:2px 6px; border-radius:4px;">${p.pass}</span><br>
         Status: ${status}
         <button type="button" onclick="aprovarOuEnviar(${i})">${btnText}</button>
-        <button type="button" onclick="excluirProtocolo(${i})" class="red">🗑️ Excluir</button>
+        <button type="button" onclick="excluirProtocolo(${i})" class="red">Excluir</button>
       </div>`;
   });
 }
 
 function abrirEditarProto(){
-  if(!protoLogado) return; 
-  document.getElementById("editProtoUser").value=protoLogado.user; 
-  document.getElementById("editProtoPass").value=protoLogado.pass; 
+  if(!protoLogado) return;
+  document.getElementById("editProtoUser").value=protoLogado.user;
+  document.getElementById("editProtoPass").value=protoLogado.pass;
   abrirModal("modalProto");
 }
 
 function abrirListaRecebida(){
   if(!protoLogado || !protoLogado.lista) return alert("Nenhuma lista foi recebida ainda.");
-  abrirModal("modalListaRecebida"); 
+  abrirModal("modalListaRecebida");
   renderizarListaInternaProtocolo();
 }
 
 function renderizarListaInternaProtocolo() {
   let container = document.getElementById("listaRecebida");
   container.innerHTML = "";
-  
   let gGeral = JSON.parse(localStorage.guests || "[]");
-  
   protoLogado.lista.forEach(c => {
     let correspondente = gGeral.find(x => x.id === c.id);
     let statusPresenca = correspondente ? correspondente.presente : c.presente;
     let acompPres = correspondente ? (correspondente.acompanhantesPresentes || 0) : 0;
-    
     container.innerHTML += `
       <div class="card card-clicavel" onclick="abrirConfirmacaoPortariaDirecta('${c.id}')" style="border-left: 6px solid ${statusPresenca ? '#008000' : 'var(--primary-color)'}; padding: 14px; max-width: 400px; margin: 10px auto;">
         <p style="font-size:16px; font-weight:bold; color:var(--primary-color); margin:0;">${c.nome}</p>
-        <p style="margin:4px 0 0 0; font-size:13px;">📌 <b>Mesa:</b> ${c.mesa} &nbsp;|&nbsp; 👥 <b>Relação:</b> ${c.grau || '-'}</p>
-        <p style="margin:2px 0 0 0; font-size:12px;">➕ <b>Acompanhantes:</b> ${acompPres} / ${c.acompanhantes || 0}</p>
-        <p style="margin:4px 0 0 0; font-size:12px;"><b>Status:</b> ${statusPresenca ? '<span style="color:green;font-weight:bold;">✅ Confirmado</span>' : '<span style="color:orange;font-weight:bold;">⏳ Ausente</span>'}</p>
+        <p style="margin:4px 0 0 0; font-size:13px;"><b>Mesa:</b> ${c.mesa} &nbsp;|&nbsp; <b>Relação:</b> ${c.grau || '-'}</p>
+        <p style="margin:2px 0 0 0; font-size:12px;"><b>Acompanhantes:</b> ${acompPres} / ${c.acompanhantes || 0}</p>
+        <p style="margin:4px 0 0 0; font-size:12px;"><b>Status:</b> ${statusPresenca ? '<span style="color:green;font-weight:bold;">Confirmado</span>' : '<span style="color:orange;font-weight:bold;">Ausente</span>'}</p>
       </div>`;
   });
 }
@@ -1612,52 +1261,51 @@ function abrirConfirmacaoPortariaDirecta(id) {
   buscarPorId();
 }
 
-function aprovarOuEnviar(i){let l=JSON.parse(localStorage.protocolos); if(!l[i].ok){l[i].ok=true; alert("✅ Protocolo/Portaria aprovado");} else{l[i].lista=JSON.parse(localStorage.guests); alert("📤 Lista enviada");} localStorage.protocolos=JSON.stringify(l); renderProtocolos();}
-function excluirProtocolo(i){if(!confirm("Deseja excluir este protocolo?")) return; let l=JSON.parse(localStorage.protocolos); l.splice(i,1); localStorage.protocolos=JSON.stringify(l); renderProtocolos();}
+function aprovarOuEnviar(i){
+  let l=JSON.parse(localStorage.protocolos);
+  if(!l[i].ok){l[i].ok=true; alert("Protocolo/Portaria aprovado");}
+  else{l[i].lista=JSON.parse(localStorage.guests); alert("Lista enviada");}
+  localStorage.protocolos=JSON.stringify(l);
+  renderProtocolos();
+}
+
+function excluirProtocolo(i){
+  if(!confirm("Deseja excluir este protocolo?")) return;
+  let l=JSON.parse(localStorage.protocolos);
+  l.splice(i,1);
+  localStorage.protocolos=JSON.stringify(l);
+  renderProtocolos();
+}
 
 function salvarProto(){
-  let l=JSON.parse(localStorage.protocolos); 
+  let l=JSON.parse(localStorage.protocolos);
   let i=l.findIndex(p=>p.user===protoLogado.user && p.pass===protoLogado.pass);
-  
   let novoUser = document.getElementById("editProtoUser").value.trim();
   let novaPass = document.getElementById("editProtoPass").value.trim();
-  
-  if(novoUser === "" || novaPass === "") {
-    return alert("❌ Erro: O Usuário e a Senha de Protocolo não podem ficar vazios!");
-  }
-
-  if(!validarSomenteLetras(novoUser)) {
-    return alert("❌ Erro: O Usuário de Protocolo deve conter apenas letras e espaços!");
-  }
-
-  if(!validarSenhaMinima(novaPass)) {
-    return alert("❌ Erro: A Senha de Protocolo deve conter no mínimo 4 caracteres!");
-  }
-  
-  l[i].user=novoUser; 
-  l[i].pass=novaPass; 
-  localStorage.protocolos=JSON.stringify(l); 
-  protoLogado=l[i]; 
-  
-  if(document.getElementById('protoNome')) document.getElementById('protoNome').innerText=l[i].user; 
-  alert("✅ Dados salvos com sucesso!"); 
+  if(novoUser === "" || novaPass === "") return alert("Erro: O Usuário e a Senha de Protocolo não podem ficar vazios!");
+  if(!validarSomenteLetras(novoUser)) return alert("Erro: O Usuário de Protocolo deve conter apenas letras e espaços!");
+  if(!validarSenhaMinima(novaPass)) return alert("Erro: A Senha de Protocolo deve conter no mínimo 4 caracteres!");
+  l[i].user=novoUser;
+  l[i].pass=novaPass;
+  localStorage.protocolos=JSON.stringify(l);
+  protoLogado=l[i];
+  if(document.getElementById('protoNome')) document.getElementById('protoNome').innerText=l[i].user;
+  alert("Dados salvos com sucesso!");
   fecharModal("modalProto");
 }
 
-/* PESQUISA E PRESENÇA STRICT COM REGISTO DE ACOMPANHANTES */
+/* PESQUISA E PRESENÇA STRICT */
 function buscarPorId(){
-  let id=document.getElementById("buscarId").value.trim(); 
+  let id=document.getElementById("buscarId").value.trim();
   if(!id) return alert("Introduza um ID válido.");
-  let g=JSON.parse(localStorage.guests); 
-  let c = g.find(x => x.id === id); 
-  if(!c) return alert("❌ QR Code Inválido: Convidado não encontrado na lista."); 
-  
+  let g=JSON.parse(localStorage.guests);
+  let c = g.find(x => x.id === id);
+  if(!c) return alert("QR Code Inválido: Convidado não encontrado na lista.");
   let totalAcomp = parseInt(c.acompanhantes) || 0;
   let optionsAcomp = "";
   for(let i = 0; i <= totalAcomp; i++) {
     optionsAcomp += `<option value="${i}">${i} acompanhante(s)</option>`;
   }
-
   document.getElementById("resultadoBusca").innerHTML=`
     <div class="card" style="max-width: 400px; margin: 15px auto; text-align: left;">
       <h3 style="margin-top:0; text-align:center;">${c.nome}</h3>
@@ -1665,8 +1313,8 @@ function buscarPorId(){
       <p><b>Mesa:</b> ${c.mesa}</p>
       <p><b>Grau:</b> ${c.grau || '-'}</p>
       <p><b>Máximo Permitido:</b> ${totalAcomp} acompanhante(s)</p>
-      ${c.presente ? 
-        `<p style="color:red; font-weight:bold; text-align:center; margin-top:10px;">⚠️ Entrada já confirmada (${c.acompanhantesPresentes || 0} acomp. presentes)</p>` : 
+      ${c.presente ?
+        `<p style="color:red; font-weight:bold; text-align:center; margin-top:10px;">Entrada já confirmada (${c.acompanhantesPresentes || 0} acomp. presentes)</p>` :
         `
         <hr style="border-top:1px dashed var(--card-border); margin:12px 0;">
         <label style="font-size:12px; font-weight:bold; color:var(--text-dark);">Quantos acompanhantes vieram com o convidado?</label>
@@ -1680,42 +1328,26 @@ function buscarPorId(){
 }
 
 function marcarPresencaComAcompanhantes(id){
-  let g=JSON.parse(localStorage.guests); 
-  let c=g.find(x=>x.id==id); 
+  let g=JSON.parse(localStorage.guests);
+  let c=g.find(x=>x.id==id);
   if(!c) return;
-
-  if(c.presente){
-    alert("⚠️ Presença duplicada"); 
-    return;
-  } 
-  
+  if(c.presente){ alert("Presença duplicada"); return; }
   let selectEl = document.getElementById("selectAcompReal");
   let acompReal = selectEl ? parseInt(selectEl.value) : 0;
-
-  c.presente = true; 
+  c.presente = true;
   c.acompanhantesPresentes = acompReal;
-  localStorage.guests = JSON.stringify(g); 
-  
+  localStorage.guests = JSON.stringify(g);
   salvarRegistoEntrada(c.id, c.nome, c.mesa, acompReal);
-  alert(`✅ Entrada de ${c.nome} (+${acompReal} acomp.) marcada com sucesso!`); 
-  
+  alert(`Entrada de ${c.nome} (+${acompReal} acomp.) marcada com sucesso!`);
   document.getElementById("resultadoBusca").innerHTML = "";
   document.getElementById("buscarId").value = "";
 }
 
-/* GESTÃO DOS REGISTOS DE PORTARIA */
+/* REGISTOS DE PORTARIA */
 function salvarRegistoEntrada(id, nome, mesa, acompPresentes = 0) {
   let registos = JSON.parse(localStorage.registosEntrada || "[]");
   let horaAtual = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-  
-  registos.unshift({
-    id: id,
-    nome: nome,
-    mesa: mesa,
-    acomp: acompPresentes,
-    hora: horaAtual
-  });
-  
+  registos.unshift({ id: id, nome: nome, mesa: mesa, acomp: acompPresentes, hora: horaAtual });
   localStorage.registosEntrada = JSON.stringify(registos);
 }
 
@@ -1727,12 +1359,10 @@ function abrirRegistosFeitos() {
 function renderRegistosFeitos() {
   let registos = JSON.parse(localStorage.registosEntrada || "[]");
   let container = document.getElementById("tabelaRegistosContainer");
-  
   if (registos.length === 0) {
     container.innerHTML = `<p style="text-align:center; color:gray; font-size:13px; margin-top:15px;">Nenhum registo de entrada feito nesta sessão.</p>`;
     return;
   }
-  
   let html = `
     <table class="tabela-registos">
       <thead>
@@ -1743,9 +1373,7 @@ function renderRegistosFeitos() {
           <th>Acomp.</th>
         </tr>
       </thead>
-      <tbody>
-  `;
-  
+      <tbody>`;
   registos.forEach(r => {
     html += `
       <tr>
@@ -1753,15 +1381,9 @@ function renderRegistosFeitos() {
         <td>${r.nome} <br><span style="font-size:9px; color:gray;">[${r.id}]</span></td>
         <td>${r.mesa}</td>
         <td style="text-align:center; font-weight:bold;">${r.acomp || 0}</td>
-      </tr>
-    `;
+      </tr>`;
   });
-  
-  html += `
-      </tbody>
-    </table>
-  `;
-  
+  html += `</tbody></table>`;
   container.innerHTML = html;
 }
 
@@ -1772,66 +1394,43 @@ function limparHistoricoRegistos() {
   }
 }
 
-/* CÂMARA SCANNER - TOGGLE (ABRIR E FECHAR) */
+/* CÂMARA SCANNER TOGGLE */
 function toggleCamara() {
-  if (cameraAtiva) {
-    fecharScanner();
-  } else {
-    acionarFluxoLeitura();
-  }
+  if (cameraAtiva) { fecharScanner(); }
+  else { acionarFluxoLeitura(); }
 }
 
 function acionarFluxoLeitura() {
   fecharScanner();
-  document.getElementById("resultadoBusca").innerHTML = ""; 
+  document.getElementById("resultadoBusca").innerHTML = "";
   document.getElementById("containerAlternativo").innerHTML = "";
-
   let cameraWrapper = document.getElementById("cameraWrapper");
   cameraWrapper.innerHTML = '<div id="scannerNativo" style="width:100%; min-height:250px;"></div>';
-
   if (typeof Html5Qrcode === "undefined") {
-    alert("❌ A biblioteca de leitura QR não foi carregada. Verifique a ligação de internet.");
+    alert("A biblioteca de leitura QR não foi carregada. Verifique a ligação de internet.");
     return;
   }
-
   html5QrCodeEngine = new Html5Qrcode("scannerNativo");
-
-  const config = { 
-    fps: 15, 
-    qrbox: { width: 220, height: 220 } 
-  };
-
+  const config = { fps: 15, qrbox: { width: 220, height: 220 } };
   let btnCam = document.getElementById("btnToggleCamera");
-
+  
   html5QrCodeEngine.start(
-    { facingMode: { exact: "environment" } },
-    config,
-    (decodedText) => {
-      processarCodigoDetectado(decodedText);
-    },
-    (errorMessage) => {}
+    { facingMode: { exact: "environment" } }, config,
+    (decodedText) => { processarCodigoDetectado(decodedText); },
+    () => {}
   ).then(() => {
     cameraAtiva = true;
-    if(btnCam) {
-      btnCam.innerText = "🔴 Fechar Câmera";
-      btnCam.classList.add("red");
-    }
-  }).catch(err => {
+    if(btnCam) { btnCam.innerText = "Fechar Câmera"; btnCam.classList.add("red"); }
+  }).catch(() => {
     html5QrCodeEngine.start(
-      { facingMode: "environment" },
-      config,
-      (decodedText) => {
-        processarCodigoDetectado(decodedText);
-      },
-      (errorMessage) => {}
+      { facingMode: "environment" }, config,
+      (decodedText) => { processarCodigoDetectado(decodedText); },
+      () => {}
     ).then(() => {
       cameraAtiva = true;
-      if(btnCam) {
-        btnCam.innerText = "🔴 Fechar Câmera";
-        btnCam.classList.add("red");
-      }
-    }).catch(err2 => {
-      alert("⚠️ Não foi possível ligar a câmara diretamente. Utilize o seletor de ficheiros/foto.");
+      if(btnCam) { btnCam.innerText = "Fechar Câmera"; btnCam.classList.add("red"); }
+    }).catch(() => {
+      alert("Não foi possível ligar a câmara diretamente. Utilize o seletor de ficheiros/foto.");
       document.getElementById("arquivoQrNativo").click();
     });
   });
@@ -1844,7 +1443,7 @@ function lerQrDeArquivo(input) {
     const html5QrCodeFile = new Html5Qrcode("qrInvisivel");
     html5QrCodeFile.scanFile(arquivo, true)
       .then(decodedText => { processarCodigoDetectado(decodedText); })
-      .catch(err => { alert("❌ Não foi possível ler o QR Code nesta foto. Tente aproximar um pouco mais a câmara."); });
+      .catch(() => { alert("Não foi possível ler o QR Code nesta foto. Tente aproximar um pouco mais a câmara."); });
   }
 }
 
@@ -1853,21 +1452,19 @@ function processarCodigoDetectado(textoCodigo) {
   let g = JSON.parse(localStorage.guests);
   let idLimpo = textoCodigo.trim();
   let existe = g.some(x => x.id === idLimpo);
-  
   if (existe) {
     document.getElementById("buscarId").value = idLimpo;
     buscarPorId();
   } else {
-    alert("❌ Acesso Negado: Este QR Code não pertence a nenhum convidado da lista oficial!");
+    alert("Acesso Negado: Este QR Code não pertence a nenhum convidado da lista oficial!");
   }
 }
 </script>
 
- <script>
+<script>
 if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("service-worker.js");
 }
-</script> 
-
+</script>
 </body>
 </html>
