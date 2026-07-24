@@ -1,15 +1,23 @@
 {
+  "short_name": "Kudima Events",
   "name": "Gestão de Eventos Kudima",
-  "short_name": "Kudima",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#228B22",
   "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any apple"
+    },
     {
       "src": "icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
-  ]
+  ],
+  "start_url": "./index.html",
+  "background_color": "#F4F6F4",
+  "theme_color": "#738271",
+  "display": "standalone",
+  "orientation": "portrait"
 }
